@@ -1,27 +1,7 @@
 <template>
     <b-container>
         <Loading v-if="validating"/>
-        <b-row v-if="!validating && user">
-            <b-col></b-col>
-            <b-col sm="12" md="8">
-                <b-card title="Card Title" no-body class="mt-2">
-                    <b-card-header header-tag="nav">
-                        <div class="d-flex justify-content-between">
-                            <Menu/>
-                            <Logout/>
-                        </div>
-                    </b-card-header>
-
-                    <b-card-body>
-                        <Content/>
-                    </b-card-body>
-                </b-card>
-            </b-col>
-            <b-col></b-col>
-        </b-row>
-        <b-row v-if="!validating && !user">
-            <Content/>
-        </b-row>
+        <Content v-else/>
     </b-container>
 </template>
 <script>
@@ -32,14 +12,12 @@
     import axios from "axios";
     import {mapState} from 'vuex';
     import Loading from "@/template/Loading";
-    import Logout from "@/template/Logout";
 
     export default {
         name: 'App',
         components: {
-            Logout,
             Loading,
-            Content, Menu
+            Content
         },
         data() {
             return {
@@ -48,7 +26,8 @@
         },
         computed: mapState(['user']),
         methods: {
-            async validateToken() {
+            validateToken() {
+                this.validating = true
 
                 const json = localStorage.getItem(userKey)
                 const userData = JSON.parse(json)
@@ -65,15 +44,12 @@
                     }
                 };
 
-                const res = await axios.get(`${baseApiUrl}/user-profile`, config)
-
-                console.log(userData)
-                if (res.data) {
+                axios.get(`${baseApiUrl}/user-profile`, config).then(() => {
                     this.$store.commit('setUser', userData)
-                } else {
+                }).catch((e) => {
                     localStorage.removeItem(userKey)
                     this.$router.push({name: 'Auth'})
-                }
+                })
 
                 this.validating = false;
             }
