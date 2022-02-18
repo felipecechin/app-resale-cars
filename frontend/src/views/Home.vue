@@ -25,7 +25,6 @@
 
 
     import api from "@/api";
-    import {baseApiUrl} from "@/global";
     import Logout from "@/template/Logout";
     import Menu from "@/template/Menu";
 
@@ -34,7 +33,7 @@
         components: {Menu, Logout},
         methods: {
             async getFuncs() {
-                const res = await api.get(`${baseApiUrl}/cars`)
+                const res = await api.get(`/cars`)
                 console.log(res)
             }
         },

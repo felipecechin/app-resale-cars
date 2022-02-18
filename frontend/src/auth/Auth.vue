@@ -3,11 +3,12 @@
         <b-col></b-col>
         <b-col sm="12" md="6">
             <b-card title="Card Title" no-body class="mt-2">
-                <b-card-header>
-                    {{ register ? 'Cadastro' : 'Login' }}
-                </b-card-header>
-                <b-card-body>
-                    <b-form>
+                <b-form @submit="register ? signup : signin">
+                    <b-card-header>
+                        {{ register ? 'Cadastro' : 'Login' }}
+                    </b-card-header>
+                    <b-card-body>
+
                         <b-form-group v-if="register"
                                       label="Nome:">
                             <b-form-input
@@ -45,16 +46,16 @@
                         </b-form-group>
 
 
-                    </b-form>
-                </b-card-body>
-                <b-card-footer class="d-flex justify-content-between">
-                    <a href @click.prevent="register = !register" class="nav-link">
-                        <span v-if="register">Já tem cadastro? Faça login!</span>
-                        <span v-else>Não tem cadastro? Registre-se aqui!</span>
-                    </a>
-                    <b-button type="submit" variant="primary" v-if="register" @click="signup">Registrar</b-button>
-                    <b-button type="submit" variant="primary" v-else @click="signin">Entrar</b-button>
-                </b-card-footer>
+                    </b-card-body>
+                    <b-card-footer class="d-flex justify-content-between">
+                        <a href @click.prevent="register = !register" class="nav-link">
+                            <span v-if="register">Já tem cadastro? Faça login!</span>
+                            <span v-else>Não tem cadastro? Registre-se aqui!</span>
+                        </a>
+                        <b-button type="submit" variant="primary" v-if="register" @click="signup">Registrar</b-button>
+                        <b-button type="submit" variant="primary" v-else @click="signin">Entrar</b-button>
+                    </b-card-footer>
+                </b-form>
             </b-card>
         </b-col>
         <b-col></b-col>

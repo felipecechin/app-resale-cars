@@ -7,7 +7,6 @@
 <script>
     // @ is an alias to /src
     import Content from "@/template/Content";
-    import Menu from "@/template/Menu";
     import {userKey, baseApiUrl} from "@/global";
     import axios from "axios";
     import {mapState} from 'vuex';

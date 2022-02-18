@@ -14,7 +14,7 @@
         computed: mapState(['user']),
         methods: {
             async logout() {
-                await api.post(`${baseApiUrl}/logout`)
+                await api.post(`/logout`)
                 localStorage.removeItem(userKey)
                 this.$store.commit('setUser', null)
                 this.$router.push({name: 'Auth'})
