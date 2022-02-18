@@ -7,7 +7,6 @@
             </b-card-header>
             <b-card-body>
                 <b-form>
-
                     <b-form-group v-if="register"
                                   label="Nome:">
                         <b-form-input
@@ -45,17 +44,15 @@
                     </b-form-group>
 
 
-                    <b-button type="submit" variant="primary">Submit</b-button>
-                    <b-button type="reset" variant="danger">Reset</b-button>
                 </b-form>
             </b-card-body>
             <b-card-footer class="d-flex justify-content-between">
-                <a href @click.prevent="register = !register">
-                    <span v-if="register">Já tem cadastro? Acesse o Login!</span>
+                <a href @click.prevent="register = !register" class="nav-link">
+                    <span v-if="register">Já tem cadastro? Faça login!</span>
                     <span v-else>Não tem cadastro? Registre-se aqui!</span>
                 </a>
-                <button v-if="register" @click="signup">Registrar</button>
-                <button v-else @click="signin">Entrar</button>
+                <b-button type="submit" variant="primary" v-if="register" @click="signup">Registrar</b-button>
+                <b-button type="submit" variant="primary" v-else @click="signin">Entrar</b-button>
             </b-card-footer>
         </b-card>
     </b-col>
@@ -65,8 +62,13 @@
 <script>
     import {baseApiUrl, userKey} from '@/global'
     import axios from 'axios'
+    import {useToast} from "vue-toastification";
 
     export default {
+        setup() {
+            const toast = useToast();
+            return {toast};
+        },
         name: 'Auth',
         data: function () {
             return {
@@ -76,8 +78,9 @@
         },
         methods: {
             signin() {
-                axios.post(`${baseApiUrl}/login`, this.user)
+                axios.post(`${baseApiUrl}/auth/login`, this.user)
                     .then(res => {
+                        this.toast.success("Login efetuado com sucesso.");
                         this.$store.commit('setUser', res.data)
                         localStorage.setItem(userKey, JSON.stringify(res.data))
                         this.$router.push({path: '/'})
@@ -87,11 +90,11 @@
                     })
             },
             signup() {
-                axios.post(`${baseApiUrl}/register`, this.user)
+                axios.post(`${baseApiUrl}/auth/register`, this.user)
                     .then((res) => {
-                        console.log(res)
+                        this.toast.success("Login efetuado com sucesso.");
                         this.user = {}
-                        this.showSignup = false
+                        this.register = false
                     })
                     .catch((e) => {
                         console.log(e)

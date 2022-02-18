@@ -1,11 +1,15 @@
 <template>
     <b-container>
-        <b-row v-if="user">
+        <Loading v-if="validating"/>
+        <b-row v-if="!validating && user">
             <b-col></b-col>
             <b-col sm="12" md="8">
                 <b-card title="Card Title" no-body class="mt-2">
                     <b-card-header header-tag="nav">
-                        <Menu/>
+                        <div class="d-flex justify-content-between">
+                            <Menu/>
+                            <Logout/>
+                        </div>
                     </b-card-header>
 
                     <b-card-body>
@@ -15,7 +19,7 @@
             </b-col>
             <b-col></b-col>
         </b-row>
-        <b-row v-else>
+        <b-row v-if="!validating && !user">
             <Content/>
         </b-row>
     </b-container>
@@ -27,11 +31,20 @@
     import {userKey, baseApiUrl} from "@/global";
     import axios from "axios";
     import {mapState} from 'vuex';
+    import Loading from "@/template/Loading";
+    import Logout from "@/template/Logout";
 
     export default {
         name: 'App',
         components: {
+            Logout,
+            Loading,
             Content, Menu
+        },
+        data() {
+            return {
+                validating: true
+            }
         },
         computed: mapState(['user']),
         methods: {
@@ -39,20 +52,30 @@
 
                 const json = localStorage.getItem(userKey)
                 const userData = JSON.parse(json)
+                this.$store.commit('setUser', null)
 
                 if (!userData) {
+                    this.validating = false;
                     this.$router.push({name: 'Auth'})
                     return
                 }
-                const res = await axios.post(`${baseApiUrl}/user-profile`, {})
+                const config = {
+                    headers: {
+                        Authorization: 'bearer ' + userData.access_token,
+                    }
+                };
 
-                console.log(res.data)
+                const res = await axios.get(`${baseApiUrl}/user-profile`, config)
+
+                console.log(userData)
                 if (res.data) {
-                    console.log('ok');
+                    this.$store.commit('setUser', userData)
                 } else {
                     localStorage.removeItem(userKey)
                     this.$router.push({name: 'Auth'})
                 }
+
+                this.validating = false;
             }
         },
         created() {
