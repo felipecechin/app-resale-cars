@@ -54,4 +54,15 @@ class Car extends Model {
             'transmission' => 'required'
         ];
     }
+
+    public function messages() {
+        return [
+            'required' => 'O campo :attribute é obrigatório',
+            'km.integer' => 'O campo quilometragem deve ser um inteiro',
+        ];
+    }
+
+    public function attributes() {
+        return ['brand' => 'marca', 'model' => 'modelo', 'km' => 'quilometragem', 'color' => 'cor', 'transmission' => 'câmbio'];
+    }
 }

@@ -6,6 +6,7 @@ use App\Models\Action;
 use App\Models\Car;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Ramsey\Uuid\Type\Integer;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -49,7 +50,14 @@ class CarController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        $request->validate($this->car->rules());
+
+        $validator = Validator::make($request->toArray(), $this->car->rules(), $this->car->messages(), $this->car->attributes());
+
+        if ($validator->fails()) {
+            $formatMessages = formatMessages($validator->messages()->toArray());
+            return response()->json(['message' => $formatMessages], 400);
+        }
+
 
         $car = $this->car->create([
             'brand' => $request->get('brand'),
@@ -79,7 +87,7 @@ class CarController extends Controller {
     public function show($id) {
         $car = $this->car->find($id);
         if ($car === null) {
-            return response()->json(['erro' => 'Recurso pesquisado não existe'], 404);
+            return response()->json(['message' => 'Recurso pesquisado não existe'], 404);
         }
 
         return response()->json($car);
@@ -95,9 +103,14 @@ class CarController extends Controller {
     public function update(Request $request, $id) {
         $car = $this->car->find($id);
         if ($car === null) {
-            return response()->json(['erro' => 'Impossível realizar a atualização. O recurso solicitado não existe'], 404);
+            return response()->json(['message' => 'Impossível realizar a atualização. O recurso solicitado não existe'], 404);
         }
-        $request->validate($car->rules());
+        $validator = Validator::make($request->toArray(), $this->car->rules(), $this->car->messages(), $this->car->attributes());
+
+        if ($validator->fails()) {
+            $formatMessages = formatMessages($validator->messages()->toArray());
+            return response()->json(['message' => $formatMessages], 400);
+        }
         $car->fill($request->all());
         $car->save();
         Action::create([
@@ -118,7 +131,7 @@ class CarController extends Controller {
     public function destroy($id) {
         $car = $this->car->find($id);
         if ($car === null) {
-            return response()->json(['erro' => 'Impossível realizar a exclusão. O recurso solicitado não existe'], 404);
+            return response()->json(['message' => 'Impossível realizar a exclusão. O recurso solicitado não existe'], 404);
         }
         $car->delete();
         Action::create([
@@ -127,6 +140,6 @@ class CarController extends Controller {
             'type' => 'D',
             'occurrence' => now()
         ]);
-        return response()->json(['msg' => 'O carro foi removido com sucesso!']);
+        return response()->json(['message' => 'O carro foi removido com sucesso']);
     }
 }
