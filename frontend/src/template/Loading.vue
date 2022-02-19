@@ -1,6 +1,6 @@
 <template>
     <div class="loading">
-        <img src="@/assets/loading.gif" alt="Loading">
+        <b-spinner variant="primary" label="Spinning" class="mt-3"></b-spinner>
     </div>
 </template>
 

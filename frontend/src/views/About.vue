@@ -14,7 +14,7 @@
     import AppTemplate from "@/template/AppTemplate";
 
     export default {
-        name: 'Home',
+        name: 'About',
         components: {AppTemplate},
         methods: {
             async getFuncs() {

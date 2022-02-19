@@ -1,7 +1,7 @@
 <template>
     <div>
         <b-nav card-header pills>
-            <router-link to="/" class="nav-link" exact-active-class="active">Home</router-link>
+            <router-link to="/" class="nav-link" exact-active-class="active">Dashboard</router-link>
             <router-link to="/about" class="nav-link" exact-active-class="active">About</router-link>
             <router-link to="/car-list" class="nav-link" exact-active-class="active">Carros</router-link>
             <router-link to="/car-form" v-if="this.$route.name === 'CarForm'" class="nav-link"

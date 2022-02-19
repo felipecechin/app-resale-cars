@@ -16,9 +16,9 @@
                     </div>
                 </b-col>
             </b-form-row>
-            <div class="table-responsive">
-                <Loading v-if="loading"/>
-                <b-table striped hover :items="cars" :fields="fields" v-else>
+            <Loading v-if="loading"/>
+            <div class="table-responsive" v-else>
+                <b-table striped hover :items="cars" :fields="fields">
                     <template #cell()="data">
                         {{ data.value }}
                     </template>
@@ -76,12 +76,12 @@
     import {showErrors} from "@/global";
 
     export default {
-        name: 'Home',
+        name: 'CarList',
         setup() {
             const toast = useToast();
             return {toast};
         },
-        components: {Loading, AppTemplate, VPagination},
+        components: {AppTemplate, VPagination, Loading},
         computed: {
             pages() {
                 return Math.ceil(this.total / 10)

@@ -1,15 +1,10 @@
 import {createRouter, createWebHistory} from 'vue-router'
-import Home from '../views/Home.vue'
 import Auth from "@/auth/Auth";
 import CarList from "@/views/CarList";
 import CarForm from "@/views/CarForm";
+import Dashboard from "@/views/Dashboard";
 
 const routes = [
-    {
-        path: '/',
-        name: 'Home',
-        component: Home
-    },
     {
         path: '/about',
         name: 'About',
@@ -40,6 +35,11 @@ const routes = [
         path: '/car-form/:id?',
         name: 'CarForm',
         component: CarForm
+    },
+    {
+        path: '/',
+        name: 'Dashboard',
+        component: Dashboard
     }
 ]
 
