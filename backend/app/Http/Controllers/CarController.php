@@ -75,7 +75,7 @@ class CarController extends Controller {
             ]);
         }
 
-        return response()->json($car, 201);
+        return response()->json(['message' => 'Carro cadastrado com sucesso'], 201);
     }
 
     /**
@@ -112,14 +112,15 @@ class CarController extends Controller {
             return response()->json(['message' => $formatMessages], 400);
         }
         $car->fill($request->all());
-        $car->save();
-        Action::create([
-            'user_id' => auth()->id(),
-            'car_id' => $car->id,
-            'type' => 'U',
-            'occurrence' => now()
-        ]);
-        return response()->json($car);
+        if ($car->save()) {
+            Action::create([
+                'user_id' => auth()->id(),
+                'car_id' => $car->id,
+                'type' => 'U',
+                'occurrence' => now()
+            ]);
+        }
+        return response()->json(['message' => 'Carro atualizado com sucesso']);
     }
 
     /**
@@ -133,13 +134,14 @@ class CarController extends Controller {
         if ($car === null) {
             return response()->json(['message' => 'Impossível realizar a exclusão. O recurso solicitado não existe'], 404);
         }
-        $car->delete();
-        Action::create([
-            'user_id' => auth()->id(),
-            'car_id' => $car->id,
-            'type' => 'D',
-            'occurrence' => now()
-        ]);
+        if ($car->delete()) {
+            Action::create([
+                'user_id' => auth()->id(),
+                'car_id' => $car->id,
+                'type' => 'D',
+                'occurrence' => now()
+            ]);
+        }
         return response()->json(['message' => 'O carro foi removido com sucesso']);
     }
 }

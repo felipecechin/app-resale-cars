@@ -48,9 +48,9 @@
                 }).catch((e) => {
                     localStorage.removeItem(userKey)
                     this.$router.push({name: 'Auth'})
+                }).finally(() => {
+                    this.validating = false;
                 })
-
-                this.validating = false;
             }
         },
         created() {

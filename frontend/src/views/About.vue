@@ -1,23 +1,9 @@
 <template>
-    <b-row>
-        <b-col></b-col>
-        <b-col sm="12" md="8">
-            <b-card title="Card Title" no-body class="mt-2">
-                <b-card-header header-tag="nav">
-                    <div class="d-flex justify-content-between">
-                        <Menu/>
-                        <Logout/>
-                    </div>
-                </b-card-header>
-
-                <b-card-body>
-                    <h1>Opa</h1>
-                </b-card-body>
-            </b-card>
-        </b-col>
-        <b-col></b-col>
-    </b-row>
-
+    <AppTemplate>
+        <template v-slot:content>
+            <h1>About</h1>
+        </template>
+    </AppTemplate>
 </template>
 
 <script>
@@ -25,12 +11,11 @@
 
 
     import api from "@/api";
-    import Logout from "@/template/Logout";
-    import Menu from "@/template/Menu";
+    import AppTemplate from "@/template/AppTemplate";
 
     export default {
         name: 'Home',
-        components: {Menu, Logout},
+        components: {AppTemplate},
         methods: {
             async getFuncs() {
                 const res = await api.get(`/cars`)
