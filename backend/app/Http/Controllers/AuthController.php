@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
+use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
 
 class AuthController extends Controller {
 
@@ -91,15 +92,6 @@ class AuthController extends Controller {
     }
 
     /**
-     * Refresh a token.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function refresh() {
-        return $this->createNewToken(auth()->refresh());
-    }
-
-    /**
      * Get the authenticated User.
      *
      * @return \Illuminate\Http\JsonResponse
@@ -119,7 +111,6 @@ class AuthController extends Controller {
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => JWTAuth::factory()->getTTL() * 60,
             'user' => auth()->user()
         ]);
     }
