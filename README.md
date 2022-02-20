@@ -21,8 +21,9 @@ Foram utilizadas as seguintes tecnologias no frontend:
 3. Criar o arquivo de ambiente .env com base no arquivo .env.example e definir parâmetros de conexão ao banco de dados
 4. Executar comando ```composer install``` para instalar dependências
 5. Executar comando ```php artisan migrate``` para criar as tabelas no banco
-6. Executar comando ```php artisan serve``` para inicializar backend
-7. Entrar na pasta frontend
-8. Executar comando ```npm install``` para instalar dependências
-9. Executar comando ```npm run serve```
-10. Acessar sistema pela url http://localhost:8080
+6. Executar comando ```php artisan jwt:secret``` para gerar chave secreta JWT
+7. Executar comando ```php artisan serve``` para inicializar backend
+8. Entrar na pasta frontend
+9. Executar comando ```npm install``` para instalar dependências
+10. Executar comando ```npm run serve```
+11. Acessar sistema pela url http://localhost:8080
