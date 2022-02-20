@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Action;
 use App\Models\Car;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -29,8 +30,16 @@ class ActionController extends Controller {
         }
 
         $query = $this->action->with('user:id,name')->with('car:id,brand,model');
+        if ($request->get('user')) {
+            $query->where('user_id', $request->get('user'));
+        }
+
+        if ($request->get('type')) {
+            $query->where('type', $request->get('type'));
+        }
+
         $total = $query->count();
-        $actions = $query->skip($offset)->take($numItemsPage)->get();
+        $actions = $query->skip($offset)->take($numItemsPage)->orderByDesc('occurrence')->get();
 
         return response()->json(['total' => $total, 'actions' => $actions]);
     }

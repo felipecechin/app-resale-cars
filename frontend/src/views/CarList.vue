@@ -22,6 +22,10 @@
                     <template #cell()="data">
                         {{ data.value }}
                     </template>
+                    <template #cell(km)="data">
+                        {{ formatNumber(data.value) }}
+                    </template>
+
 
                     <template #cell(buttons)="data">
                         <div class="d-flex justify-content-end">
@@ -46,18 +50,27 @@
             </b-modal>
         </template>
         <template v-slot:footer v-if="!loading">
-            <div class="d-flex justify-content-between">
-                <div>
-                    Mostrando {{ cars.length }} de {{ total }}.
-                </div>
-                <v-pagination
-                    v-model="page"
-                    :pages="pages"
-                    :range-size="1"
-                    active-color="#DCEDFF"
-                    @update:modelValue="updateHandler"
-                />
-            </div>
+            <b-row>
+                <b-col md="6">
+                    <div class="d-flex justify-content-center justify-content-md-start" v-if="total > 0">
+                        Mostrando {{ cars.length }} de {{ total }}.
+                    </div>
+                    <div class="d-flex justify-content-center justify-content-md-start" v-else>
+                        Nenhum registro encontrado.
+                    </div>
+                </b-col>
+                <b-col md="6">
+                    <div class="d-flex justify-content-center justify-content-md-end mt-2 mt-md-0">
+                        <v-pagination
+                            v-model="page"
+                            :pages="pages"
+                            :range-size="1"
+                            active-color="#DCEDFF"
+                            @update:modelValue="updateHandler"
+                        />
+                    </div>
+                </b-col>
+            </b-row>
         </template>
     </AppTemplate>
 
@@ -85,6 +98,12 @@
         computed: {
             pages() {
                 return Math.ceil(this.total / 10)
+            },
+            formatNumber() {
+                return (value) => {
+                    const number = Number(value)
+                    return number.toLocaleString();
+                }
             }
         },
         data() {
@@ -107,7 +126,7 @@
             }
         },
         methods: {
-            async getCars(page, search) {
+            getCars(page, search) {
                 this.loading = true;
                 api.get('/cars?page=' + page + '&search=' + search).then((resp) => {
                     this.cars = resp.data.cars;

@@ -3,6 +3,7 @@
 use App\Http\Controllers\ActionController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CarController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,4 +32,5 @@ Route::middleware('jwt.verify')->group(function () {
     Route::apiResource('cars', CarController::class);
     Route::get('/dashboard', [ActionController::class, 'dashboard']);
     Route::get('/actions', [ActionController::class, 'index']);
+    Route::get('/users', [UserController::class, 'index']);
 });

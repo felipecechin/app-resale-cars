@@ -1,12 +1,12 @@
 <template>
     <b-nav>
-        <a href @click.prevent="logout" class="nav-link"><i class="fa fa-sign-out"></i> Sair</a>
+        <a href @click.prevent="logout" class="nav-link link-secondary">Sair</a>
     </b-nav>
 </template>
 
 <script>
     import {mapState} from "vuex";
-    import {baseApiUrl, userKey} from "@/global";
+    import {userKey} from "@/global";
     import api from "@/api";
 
     export default {

@@ -53,14 +53,16 @@
                     },
                     legend: {
                         display: false
-                    }
+                    },
+                    animation: false
                 },
                 chartOptionsTypeActions: {
                     responsive: true,
                     title: {
                         display: true,
                         text: 'Número de ocorrências de cada ação'
-                    }
+                    },
+                    animation: false
                 }
             }
         },

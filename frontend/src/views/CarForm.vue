@@ -1,7 +1,8 @@
 <template>
     <AppTemplate>
         <template v-slot:content>
-            <b-form @submit="save" v-if="!loading">
+            <Loading v-if="loading"/>
+            <b-form @submit="save" v-else>
                 <b-row>
                     <b-col md="6">
                         <b-form-group
@@ -50,11 +51,14 @@
                     <b-col md="6">
                         <b-form-group
                             label="Câmbio:">
-                            <b-form-input
+                            <b-form-select
                                 v-model="car.transmission"
-                                type="text"
+                                :options="[
+                                    {text: 'Automático'},
+                                    {text: 'Manual'}
+                                ]"
                                 required
-                            ></b-form-input>
+                            ></b-form-select>
                         </b-form-group>
                     </b-col>
                 </b-row>
@@ -77,11 +81,12 @@
     import {showErrors} from "@/global";
     import api from "@/api";
     import {useToast} from "vue-toastification";
+    import Loading from "@/template/Loading";
 
 
     export default {
         name: "CarForm",
-        components: {AppTemplate},
+        components: {Loading, AppTemplate},
         props: ['id'],
         setup() {
             const toast = useToast();
