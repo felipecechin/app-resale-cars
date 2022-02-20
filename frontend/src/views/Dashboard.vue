@@ -54,7 +54,19 @@
                     legend: {
                         display: false
                     },
-                    animation: false
+                    animation: false,
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                                userCallback: function (label, index, labels) {
+                                    if (Math.floor(label) === label) {
+                                        return label;
+                                    }
+                                }
+                            }
+                        }]
+                    }
                 },
                 chartOptionsTypeActions: {
                     responsive: true,
@@ -73,7 +85,7 @@
                     datasets: [
                         {
                             label: 'Número de ações por usuário',
-                            backgroundColor: '#0e1d9c',
+                            backgroundColor: '#bcffe4',
                             data: this.userActions.map((el) => el.count)
                         }
                     ]
