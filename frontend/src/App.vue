@@ -44,12 +44,12 @@
                 };
 
                 axios.get(`${baseApiUrl}/user-profile`, config).then(() => {
+                    this.validating = false
                     this.$store.commit('setUser', userData)
                 }).catch((e) => {
+                    this.validating = false
                     localStorage.removeItem(userKey)
                     this.$router.push({name: 'Auth'})
-                }).finally(() => {
-                    this.validating = false;
                 })
             }
         },
