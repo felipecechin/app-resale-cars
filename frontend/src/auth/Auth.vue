@@ -63,9 +63,9 @@
 </template>
 
 <script>
-    import {userKey, baseApiUrl, showErrors} from '@/global'
-    import axios from 'axios'
+    import {userKey, showErrors} from '@/global'
     import {useToast} from "vue-toastification";
+    import api from "@/api";
 
     export default {
         setup() {
@@ -81,7 +81,7 @@
         },
         methods: {
             signin() {
-                axios.post(`${baseApiUrl}/auth/login`, this.user)
+                api.post(`/auth/login`, this.user)
                     .then(res => {
                         this.toast.success("Login efetuado com sucesso");
                         this.$store.commit('setUser', res.data)
@@ -93,7 +93,7 @@
                     })
             },
             signup() {
-                axios.post(`${baseApiUrl}/auth/register`, this.user)
+                api.post(`/auth/register`, this.user)
                     .then((res) => {
                         this.toast.success(res.data.message);
                         this.user = {}

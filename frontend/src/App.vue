@@ -7,10 +7,10 @@
 <script>
     // @ is an alias to /src
     import Content from "@/template/Content";
-    import {userKey, baseApiUrl} from "@/global";
-    import axios from "axios";
+    import {userKey} from "@/global";
     import {mapState} from 'vuex';
     import Loading from "@/template/Loading";
+    import api from "@/api";
 
     export default {
         name: 'App',
@@ -37,19 +37,12 @@
                     this.$router.push({name: 'Auth'})
                     return
                 }
-                const config = {
-                    headers: {
-                        Authorization: 'bearer ' + userData.access_token,
-                    }
-                };
 
-                axios.get(`${baseApiUrl}/user-profile`, config).then(() => {
+                api.get(`/user-profile`).then(() => {
                     this.validating = false
                     this.$store.commit('setUser', userData)
                 }).catch((e) => {
                     this.validating = false
-                    localStorage.removeItem(userKey)
-                    this.$router.push({name: 'Auth'})
                 })
             }
         },

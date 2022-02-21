@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 class AuthController extends Controller {
 
@@ -38,7 +41,7 @@ class AuthController extends Controller {
         if (!$token = auth()->attempt($validator->validated())) {
             return response()->json(['message' => 'E-mail e/ou senha inválidos'], 401);
         }
-        return $this->createNewToken($token);
+        return $this->createNewToken($token, auth()->user());
     }
 
     /**
@@ -82,6 +85,29 @@ class AuthController extends Controller {
     }
 
     /**
+     * Refresh a token.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function refresh() {
+        try {
+            $token = auth()->refresh();
+            $user = JWTAuth::setToken($token)->toUser();
+            return $this->createNewToken($token, $user);
+        } catch (Exception $e) {
+            if ($e instanceof TokenBlacklistedException) {
+                return response()->json(['message' => 'Token não é mais válido'], 401);
+            } else if ($e instanceof TokenInvalidException) {
+                return response()->json(['message' => 'Token está inválido'], 401);
+            } else if ($e instanceof TokenExpiredException) {
+                return response()->json(['message' => 'Token está expirado'], 401);
+            } else {
+                return response()->json(['message' => 'Token de autorização não encontrado'], 401);
+            }
+        }
+    }
+
+    /**
      * Log the user out (Invalidate the token).
      *
      * @return \Illuminate\Http\JsonResponse
@@ -107,11 +133,11 @@ class AuthController extends Controller {
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function createNewToken($token) {
+    protected function createNewToken($token, $user) {
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'user' => auth()->user()
+            'user' => $user
         ]);
     }
 }
