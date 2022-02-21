@@ -49,7 +49,7 @@ class Car extends Model {
         return [
             'brand' => 'required',
             'model' => 'required',
-            'km' => 'required|integer',
+            'km' => 'required|integer|min:0',
             'color' => 'required',
             'transmission' => 'required'
         ];
@@ -59,6 +59,7 @@ class Car extends Model {
         return [
             'required' => 'O campo :attribute é obrigatório',
             'km.integer' => 'O campo quilometragem deve ser um inteiro',
+            'km.min' => 'O campo quilometragem precisa ser no mínimo 0'
         ];
     }
 

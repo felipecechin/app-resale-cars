@@ -3,7 +3,8 @@
         <b-nav card-header pills>
             <router-link to="/" class="nav-link" exact-active-class="active">Dashboard</router-link>
             <router-link to="/car-list" class="nav-link" exact-active-class="active">Carros</router-link>
-            <router-link to="/car-form" v-if="this.$route.name === 'CarForm'" class="nav-link"
+            <router-link :to="'/car-form'+(this.$route.params.id ? '/' + this.$route.params.id : '')"
+                         v-if="this.$route.name === 'CarForm'" class="nav-link"
                          :class="[{'router-link-active active': this.$route.path.indexOf('car-form') > -1 }]">
                 {{ this.$route.params.id ? 'Editar' : 'Adicionar' }} carro
             </router-link>
