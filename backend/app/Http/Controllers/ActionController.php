@@ -21,7 +21,7 @@ class ActionController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request) {
-        $numItemsPage = 10;
+        $numItemsPage = 5;
         if ($request->get('page')) {
             $page = $request->get('page');
             $offset = ($page - 1) * $numItemsPage;
